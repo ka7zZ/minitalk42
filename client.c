@@ -52,15 +52,5 @@ int main(int argc, char *argv[])
 		j = 0;
 		i++;
 	}
-	// // Get the server's PID (should be provided or known)
-	// printf("Enter the server PID: ");
-	// scanf("%d", &server_pid);
-
-	// printf ("\n");
-	// // Send signals to the server
-	// kill(server_pid, SIGUSR1);  // Send SIGUSR1
-	// sleep(1);                    // Sleep for a second
-	// kill(server_pid, SIGUSR2);  // Send SIGUSR2
-
 	return 0;
 }
