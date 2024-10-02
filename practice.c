@@ -10,45 +10,45 @@ void control(int num)
 	printf("can't kill me\nnum --->> %d\n", num);
 }
 
-void print_bits(unsigned char octet)
-{
-	int i = 8;
-	unsigned char 	bit;
+// void print_bits(unsigned char octet)
+// {
+// 	int i = 8;
+// 	unsigned char 	bit;
 
-	while (i--)
-	{
-		bit = (octet >> i & 1) + '0';
-		write(1, &bit, 1);
-	}
-	write(1, "\n", 1);
-}
+// 	while (i--)
+// 	{
+// 		bit = (octet >> i & 1) + '0';
+// 		write(1, &bit, 1);
+// 	}
+// 	write(1, "\n", 1);
+// }
 
 int main(void)
 {
-	int	n = 2;
-	int bit = n >> 1 & ;
+	// int	n = 2;
+	// int bit = n >> 1 & ;
 
-	print_bits(bit);
-	// struct sigaction action;
-	// int n, p[0];
-	// char buf[1000];
+	// print_bits(bit);
+	struct sigaction action;
+	int n, p[0];
+	char buf[1000];
 
-	// pipe(p);
+	pipe(p);
 
-	// action.sa_handler = control;
-	// sigemptyset(&action.sa_mask);
-	// action.sa_flags = SA_RESTART; // restart automatically if the SIGINT is passed
-	// //action.sa_flags = 0; continues the while loop;
+	action.sa_handler = control;
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = SA_RESTART; // restart automatically if the SIGINT is passed
+	//action.sa_flags = 0; continues the while loop;
 
-	// sigaction(SIGINT, &action, NULL);
+	sigaction(SIGINT, &action, NULL);
 
-	// while (1)
-	// {
-	// 	n = read(p[0], buf, 1000);
-	// 	printf("read returned: %d, errno = %d\n", n, errno);
-	// 	sleep(5);
-	// 	printf("i'm done sleeping but still...\n");
-	// }
+	while (1)
+	{
+		n = read(p[0], buf, 1000);
+		printf("read returned: %d, errno = %d\n", n, errno);
+		sleep(5);
+		printf("i'm done sleeping but still...\n");
+	}
 	return (1);
 }
 
@@ -195,5 +195,24 @@ int main(void)
 https://www.yendor.com/programming/unix/apue/ch10.html
 https://users.soe.ucsc.edu/~sbrandt/105/Slides/Chapter10.pdf
 https://thelinuxcode.com/c-sigaction-function-usage/
+
+
+    .-------------------.
+    | BITWISE OPERATORS |
+    '-------------------'
+    
+    AND(&)                  -> checks if the both flags are 1 and return 1, else return 0
+    OR (|)                  -> checks if one on the flags are 1 return 1, else return 0
+    eXclusive OR (^)        -> checks if both are the same and returns 0, else return 1
+    SHIFT RIGHT (>>)        -> shifts at the right, filling the left side with 0's
+                            -> any int shifted right will result the half of it rounded back
+                            -> ex:  variable >> 1; destroys the bit on the far right and fill the far left with 0
+                                    variable >> 3; destroys 3 bits on the far right and fill the far left with 3 zero's
+    SHIFT LEFT  (<<)        -> the same bit at reverse;
+    any bitwise op and '='  -> the variable will receive the result;
+
+    Bit Manipulation
+
+    
 
 */
