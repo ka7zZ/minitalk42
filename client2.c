@@ -85,16 +85,27 @@ void handle_input(char **input, pid_t pid)
 
 int main(int argc, char *argv[]) 
 {
-    char    *ptr;
+	pid_t   server_pid;
+	int     check = 0;
+    int     i = 0;
 
-	if (argc < 3 || !argv[2][0])
-        return (ft_putstr_fd("Not enough values!\n", 1), 0);
-    ptr = argv[1];
-    while (ft_isdigit(*ptr))
-        ptr++;
-    if (*ptr != '\0')
-        return (ft_putstr_fd("Wrong pid format!\n", 1), 0);
-    handle_input(argv, (pid_t)ft_atoi(argv[1]));
+	if (argc >= 3 && argv[2][0])
+    {
+        while (ft_isdigit(argv[1][i]))
+        {
+            check = 1;
+            i++;
+        }
+        if (check && argv[1][i] == '\0')
+            server_pid = ft_atoi(argv[1]);
+        else
+        {
+            ft_putstr_fd("PID Incorrect\n", 1);
+            return (0);
+        }
+        handle_input(argv, server_pid);
+    }
+    else
+        ft_putstr_fd("Not enough values!\n", 1);
     return (0);
 }
-

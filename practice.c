@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <errno.h>
+
 void control(int num)
 {
 	printf("can't kill me\nnum --->> %d\n", num);
