@@ -55,7 +55,17 @@ void	ft_putstr_fd(char *str, int fd)
 	}
 }
 
-void handle_input(char **input, pid_t pid)
+void    handle_input(int signo)
+{
+    static int  number = 0;
+
+    if (signo == SIGUSR1)
+        printf("Received letter %d!\n", ++number);
+    else
+        number = 0;
+}
+
+void    handle_output(char **input, pid_t pid)
 {
     int             i = 2;
 	int             j = 0;
@@ -83,18 +93,26 @@ void handle_input(char **input, pid_t pid)
     }
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char **argv) 
 {
-    char    *ptr;
-
-	if (argc < 3 || !argv[2][0])
+    char                *ptr;
+    struct sigaction    sa;
+    
+    if (argc < 3 || !argv[2][0])
         return (ft_putstr_fd("Not enough values!\n", 1), 0);
     ptr = argv[1];
     while (ft_isdigit(*ptr))
         ptr++;
     if (*ptr != '\0')
         return (ft_putstr_fd("Wrong pid format!\n", 1), 0);
-    handle_input(argv, (pid_t)ft_atoi(argv[1]));
+    
+    sa.sa_handler = handle_input;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+
+    sigaction(SIGUSR1, &sa, NULL);
+
+    handle_output(argv, (pid_t)ft_atoi(argv[1]));
+
     return (0);
 }
-

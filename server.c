@@ -4,19 +4,23 @@
 #include <unistd.h>
 #include <string.h>
 
-void    handle_signal(int signo)
+int    handle_signal(int signo, siginfo_t *info, void *context)
 {
 	static unsigned char     ch = 0;
 	static int               idx = 0;
+    pid_t                    client_pid;
 
 	if (signo == SIGUSR1)
-		ch <<= 1;	
-	if (signo == SIGUSR2)
-		ch = (ch << 1) | 1;
+    	ch <<= 1;	
+    else if (signo == SIGUSR2)
+        ch = (ch << 1) | 1;
+    else
+        write(1, "Wrong signal!\n", 1);
     idx++;
 	if (idx == 8)
 	{
-		write (1, &ch, 1);
+        kill(info->si_pid, SIGUSR1);
+        write (1, &ch, 1);
         idx = 0;
 	}
 }
@@ -24,20 +28,19 @@ void    handle_signal(int signo)
 int main() 
 {
 	struct sigaction handler;
-	
-	// Server's PID
+	int     test = 0;
 	printf("Server PID: %d\n", getpid());
 
-	handler.sa_handler = handle_signal;
+	handler.sa_handler = (void (*)(int))handle_signal;
 	sigemptyset(&handler.sa_mask);
-	handler.sa_flags = 0;
+	handler.sa_flags = SA_SIGINFO;
 
 	sigaction(SIGUSR1, &handler, NULL);
-	sigaction(SIGUSR2, &handler, NULL);
+    sigaction(SIGUSR2, &handler, NULL);
+
 	while (1) {
 		pause();
 	}
-
 	return 0;
 }
 
