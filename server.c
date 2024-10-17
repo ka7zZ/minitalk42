@@ -1,42 +1,41 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <string.h>
 
-int    handle_signal(int signo, siginfo_t *info, void *context)
+#include <signal.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include "libft/ft_printf/ft_printf.h"
+#include "libft/libft.h"
+
+void    handle_signal(int signo, siginfo_t *info, void *context)
 {
 	static unsigned char     ch = 0;
 	static int               idx = 0;
-    pid_t                    client_pid;
 
+	(void)context;
 	if (signo == SIGUSR1)
     	ch <<= 1;	
     else if (signo == SIGUSR2)
         ch = (ch << 1) | 1;
-    else
-        write(1, "Wrong signal!\n", 1);
     idx++;
 	if (idx == 8)
 	{
         kill(info->si_pid, SIGUSR1);
-        write (1, &ch, 1);
+        write(1, &ch, 1);
         idx = 0;
 	}
 }
 
 int main() 
 {
-	struct sigaction handler;
-	int     test = 0;
-	printf("Server PID: %d\n", getpid());
+	struct sigaction sa;
 
-	handler.sa_handler = (void (*)(int))handle_signal;
-	sigemptyset(&handler.sa_mask);
-	handler.sa_flags = SA_SIGINFO;
+	ft_printf("Server PID: %d\n", getpid());
 
-	sigaction(SIGUSR1, &handler, NULL);
-    sigaction(SIGUSR2, &handler, NULL);
+	sa.sa_handler = (void (*)(int))handle_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_SIGINFO;
+
+	sigaction(SIGUSR1, &sa, NULL);
+    sigaction(SIGUSR2, &sa, NULL);
 
 	while (1) {
 		pause();
