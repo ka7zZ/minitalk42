@@ -5,22 +5,38 @@
 #include "libft/ft_printf/ft_printf.h"
 #include "libft/libft.h"
 
+void	reverse_char(unsigned char *ch)
+{
+	unsigned char   result = 0;
+	int             i = 8;
+
+	while (i--)
+	{
+		result = (result << 1) | (*ch & 1);
+		*ch >>= 1;
+	}
+	*ch = result;
+}
 void    handle_signal(int signo, siginfo_t *info, void *context)
 {
 	static unsigned char     ch = 0;
 	static int               idx = 0;
 
+	
 	(void)context;
 	if (signo == SIGUSR1)
-    	ch <<= 1;	
+    	ch <<= 1;
     else if (signo == SIGUSR2)
         ch = (ch << 1) | 1;
-    idx++;
+	idx++;
 	if (idx == 8)
 	{
-        kill(info->si_pid, SIGUSR1);
-        write(1, &ch, 1);
-        idx = 0;
+		if (ch == '\0')
+        	kill(info->si_pid, SIGUSR1);
+		reverse_char(&ch);
+		write(1, &ch, 1);
+        ch = 0;
+		idx = 0;
 	}
 }
 
@@ -34,10 +50,12 @@ int main()
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO;
 
-	sigaction(SIGUSR1, &sa, NULL);
-    sigaction(SIGUSR2, &sa, NULL);
-
-	while (1) {
+	if (sigaction(SIGUSR1, &sa, NULL) < 0)
+		return (ft_printf("Error: sigaction SIGUSR1\n"));
+    if (sigaction(SIGUSR2, &sa, NULL) < 0)
+		return (ft_printf("Error: sigaction SIGUSR2\n"));
+	while (1)
+	{
 		pause();
 	}
 	return 0;
