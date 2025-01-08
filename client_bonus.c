@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 14:19:59 by aghergut          #+#    #+#             */
-/*   Updated: 2024/12/20 12:27:24 by aghergut         ###   ########.fr       */
+/*   Created: 2024/12/19 14:21:38 by aghergut          #+#    #+#             */
+/*   Updated: 2024/12/20 12:27:11 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,18 @@ void	send_char(pid_t pid, char c)
 	}
 }
 
-void	confirm(int signo)
+void	handle_input(int signo)
 {
-	if (signo == SIGUSR2)
-		g_check = 1;
+	static int	number = 0;
+
+	if (signo == SIGUSR1)
+	{
+		if (number == 0)
+			ft_printf("\n\nReceived %d string!\n", ++number);
+		else
+			ft_printf("\n\nReceived %d strings!\n", ++number);
+	}
+	g_check = 1;
 }
 
 void	handle_output(char **input, pid_t pid)
@@ -73,11 +81,8 @@ int	main(int argc, char **argv)
 		ptr++;
 	if (*ptr != '\0')
 		return (ft_printf("Wrong pid format!\n"));
-	if (signal(SIGUSR2, &confirm) == SIG_ERR)
-	{
-		ft_putstr_fd("Failed to receive confirmation", 1);
-		exit(EXIT_FAILURE);
-	}
+	signal(SIGUSR1, &handle_input);
+	signal(SIGUSR2, &handle_input);
 	handle_output(argv, (pid_t)ft_atoi(argv[1]));
 	return (0);
 }

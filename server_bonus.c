@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 14:19:53 by aghergut          #+#    #+#             */
-/*   Updated: 2024/12/19 19:39:19 by aghergut         ###   ########.fr       */
+/*   Created: 2024/12/19 17:02:50 by aghergut          #+#    #+#             */
+/*   Updated: 2024/12/20 12:05:36 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_check;
 
-void	ft_handle_char(char **str, char ch)
+void	ft_handle_char(char **str, char ch, pid_t pid)
 {
 	if (ch == '\0')
 	{
@@ -22,6 +22,7 @@ void	ft_handle_char(char **str, char ch)
 		free(*str);
 		*str = NULL;
 		write(1, "\n", 1);
+		kill(pid, SIGUSR1);
 	}
 	else
 		*str = ft_expandstr(*str, ch);
@@ -47,7 +48,7 @@ void	ft_handle(int signo, siginfo_t *info, void *context)
 	bits--;
 	if (!bits && g_check)
 	{
-		ft_handle_char(&str, (char)ch);
+		ft_handle_char(&str, (char)ch, info->si_pid);
 		g_check = 0;
 	}
 	kill(info->si_pid, SIGUSR2);

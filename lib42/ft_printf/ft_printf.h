@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:52:14 by aghergut          #+#    #+#             */
-/*   Updated: 2024/12/16 15:23:50 by aghergut         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:33:33 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int			ft_printpxx(va_list *args, t_flags *flags, char type);
 int			ft_printstr(t_flags *flags, char *content);
 int			ft_printu(t_flags *flags, unsigned int number);
 int			ft_printf(const char *format, ...);
-int         ft_fill(int cond1, int cond2, char fill);
-int         ft_gethex(unsigned long long mem, char type);
-int         ft_memlen(unsigned long long mem);
-int	        ft_numlen(long n);
+int			ft_fill(int cond1, int cond2, char fill);
+int			ft_gethex(unsigned long long mem, char type);
+int			ft_memlen(unsigned long long mem);
+int			ft_numlen(long n);
 
 #endif

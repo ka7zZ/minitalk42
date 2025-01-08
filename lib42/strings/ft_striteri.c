@@ -6,10 +6,9 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:29:04 by aghergut          #+#    #+#             */
-/*   Updated: 2024/10/15 17:43:23 by aghergut         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:36:22 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {

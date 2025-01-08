@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:04:50 by aghergut          #+#    #+#             */
-/*   Updated: 2024/10/15 18:11:10 by aghergut         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:35:41 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"strings.h"
+#include "strings.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

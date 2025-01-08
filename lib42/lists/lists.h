@@ -6,12 +6,12 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 17:20:24 by aghergut          #+#    #+#             */
-/*   Updated: 2024/10/16 15:57:58 by aghergut         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:35:09 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_H
-# define LIST_H
+#ifndef LISTS_H
+# define LISTS_H
 
 # include <stdlib.h>
 # include <stddef.h>

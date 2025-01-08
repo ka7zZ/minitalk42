@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:05:02 by aghergut          #+#    #+#             */
-/*   Updated: 2024/10/16 15:32:27 by aghergut         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:32:14 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static char	*ft_line(t_list **h, t_list *buf, char *res)
 char	*get_next_line(int fd)
 {
 	static t_list	*head[OPEN_MAX];
-	t_list		*ptr;
+	t_list			*ptr;
 	char			*buffer;
 	int				reading;
 
