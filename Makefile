@@ -6,57 +6,73 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 16:48:42 by aghergut          #+#    #+#              #
-#    Updated: 2024/12/20 12:17:08 by aghergut         ###   ########.fr        #
+#    Updated: 2025/02/05 13:14:34 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = clang
+GRAY = \033[0;90m
+CYAN = \033[0;96m
+WHITE = \033[0;97m
+RESET_COLOR = \033[0m
+
+COMPILER = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
 SERVER = server
 CLIENT = client
 
-SRCS = server.c client.c
-SRCSB = server_bonus.c client_bonus.c
+SERVER_SRC = server.c
+CLIENT_SRC = client.c
 
-OBJECTS = $(SRCS:.c=.o)
-OBJECTS_BONUS = $(SRCSB:.c=.o)
+SERVERB_SRC = server_bonus.c
+CLIENTB_SRC = client_bonus.c
 
+LIBFT_FLAGS = -Llibft -lft
+LIBFT_MAKE = make -s -C libft > /dev/null 2>&1
+LIBFT_FCLEAN = make -s -C libft fclean > /dev/null 2>&1
 
-all: server client
+SERVER_OBJ = $(SERVER_SRC:.c=.o)
+CLIENT_OBJ = $(CLIENT_SRC:.c=.o)
 
-server: libft
-	@$(CC) $(CFLAGS) $(SERVER) -o server -Llibft -lft
-	@echo "Server compiled"
-	
-client: libft
-	@$(CC) $(CFLAGS) $(CLIENT) -o client -Llibft -lft
-	@echo "Client compiled"
+SERVERB_OBJ = $(SERVERB_SRC:.c=.o)
+CLIENTB_OBJ = $(CLIENTB_SRC:.c=.o)
 
-server_bonus: libft
-	@$(CC) $(CFLAGS) $(SERVER_BONUS) -o server_bonus -Llibft -lft
+all: $(SERVER) $(CLIENT) 
 
-client_bonus: libft
-	@$(CC) $(CFLAGS) $(CLIENT_BONUS) -o client_bonus -Llibft -lft
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
-bonus: server_bonus client_bonus
-	@rm -f server client
-	@echo "Bonus compiled"
+$(SERVER): $(SERVER_OBJ)
+	@echo "$(GRAY)Compiling libft...$(RESET_COLOR)"
+	@$(LIBFT_MAKE)
+	@echo "$(CYAN)Linking...$(RESET_COLOR)"
+	@$(COMPILER) $(CFLAGS) $(SERVER_OBJ) $(LIBFT_FLAGS) -o $(SERVER)
 
-libft:
-	@make -C libft
+$(CLIENT): $(CLIENT_OBJ)
+	@$(COMPILER) $(CFLAGS) $(CLIENT_OBJ) $(LIBFT_FLAGS) -o $(CLIENT)
+	@echo "$(WHITE)Minitalk compiled successfully!$(RESET_COLOR)"
+
+bonus: fclean $(SERVERB_OBJ) $(CLIENTB_OBJ)
+	@echo "$(GRAY)Compiling libft...$(RESET_COLOR)"
+	@$(LIBFT_MAKE)
+	@echo "$(CYAN)Linking bonus...$(RESET_COLOR)"
+	@$(COMPILER) $(CFLAGS) $(SERVERB_OBJ) $(LIBFT_FLAGS) -o $(SERVER)
+	@$(COMPILER) $(CFLAGS) $(CLIENTB_OBJ) $(LIBFT_FLAGS) -o $(CLIENT)
+	@echo "$(WHITE)Minitalk's bonus compiled successfully!$(RESET_COLOR)"
 
 clean:
-	@rm -f $(OBJECTS)
-	@echo "Objects removed"
-	@rm -f $(OBJECTS_BONUS)
-	@echo "Bonus objects removed"
-	@make -C libft fclean
+	@if [ -f "$(SERVER_OBJ)" ]; then rm -f "$(SERVER_OBJ)"; fi
+	@if [ -f "$(CLIENT_OBJ)" ]; then rm -f "$(CLIENT_OBJ)"; fi
+	@if [ -f "$(SERVERB_OBJ)" ]; then rm -f "$(SERVERB_OBJ)"; fi
+	@if [ -f "$(CLIENTB_OBJ)" ]; then rm -f "$(CLIENTB_OBJ)"; fi
+	@echo "Objects removed!"
+	@$(LIBFT_FCLEAN)
 	
 fclean: clean
-	@rm -f server client libft/libft.a server_bonus client_bonus
+	@rm -f $(SERVER) $(CLIENT)
+	@echo "Minitalk removed!"
 
 re: fclean all
 
-.PHONY: all libft bonus clean fclean re
+.PHONY: all bonus clean fclean re

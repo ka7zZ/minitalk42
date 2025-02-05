@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 13:11:03 by aghergut          #+#    #+#              #
-#    Updated: 2024/10/17 14:34:45 by aghergut         ###   ########.fr        #
+#    Updated: 2024/12/19 17:31:29 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ SRCS5 = $(STRINGS_FOLDER)ft_strchr.c $(STRINGS_FOLDER)ft_strlcat.c \
 	  $(STRINGS_FOLDER)ft_split.c $(STRINGS_FOLDER)ft_strdup.c \
 	  $(STRINGS_FOLDER)ft_strmapi.c $(STRINGS_FOLDER)ft_strncat.c \
 	  $(STRINGS_FOLDER)ft_striteri.c $(STRINGS_FOLDER)ft_calloc.c \
-	  $(STRINGS_FOLDER)ft_bzero.c 
+	  $(STRINGS_FOLDER)ft_bzero.c $(STRINGS_FOLDER)ft_expandstr.c
 SRCS6 = $(MEMORY_FOLDER)ft_memset.c $(MEMORY_FOLDER)ft_memcpy.c \
 	  $(MEMORY_FOLDER)ft_memmove.c $(MEMORY_FOLDER)ft_memchr.c \
 	  $(MEMORY_FOLDER)ft_memcmp.c
