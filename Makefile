@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 16:48:42 by aghergut          #+#    #+#              #
-#    Updated: 2025/02/05 13:14:34 by aghergut         ###   ########.fr        #
+#    Updated: 2025/03/06 20:25:10 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,11 +22,11 @@ CFLAGS = -Wall -Wextra -Werror
 SERVER = server
 CLIENT = client
 
-SERVER_SRC = server.c
-CLIENT_SRC = client.c
+SERVER_SRC = ./srcs/mandatory/server.c
+CLIENT_SRC = ./srcs/mandatory/client.c
 
-SERVERB_SRC = server_bonus.c
-CLIENTB_SRC = client_bonus.c
+SERVERB_SRC = ./srcs/bonus/server_bonus.c
+CLIENTB_SRC = ./srcs/bonus/client_bonus.c
 
 LIBFT_FLAGS = -Llibft -lft
 LIBFT_MAKE = make -s -C libft > /dev/null 2>&1

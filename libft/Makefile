@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 13:11:03 by aghergut          #+#    #+#              #
-#    Updated: 2024/12/19 17:31:29 by aghergut         ###   ########.fr        #
+#    Updated: 2025/02/21 12:21:25 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,15 +63,15 @@ SRCS9 = $(FTPRINTF_FOLDER)flags/ft_flagadd.c $(FTPRINTF_FOLDER)prints/ft_printch
 	  $(FTPRINTF_FOLDER)ft_printf.c
 
 # Object directories
-OBJS_DIR_CHANGECHAR = $(CHANGECHAR_FOLDER)o_files/
-OBJS_DIR_CHECKCHAR = $(CHECKCHAR_FOLDER)o_files/
-OBJS_DIR_STRTOINT = $(STRTOINT_FOLDER)o_files/
-OBJS_DIR_GET_NEXT_LINE = $(GET_NEXT_LINE_FOLDER)o_files/
-OBJS_DIR_STRINGS = $(STRINGS_FOLDER)o_files/
-OBJS_DIR_MEMORY = $(MEMORY_FOLDER)o_files/
-OBJS_DIR_PUTS = $(PUTS_FOLDER)o_files/
-OBJS_DIR_LISTS = $(LISTS_FOLDER)o_files/
-OBJS_DIR_FTPRINTF = $(FTPRINTF_FOLDER)o_files/
+OBJS_DIR_CHANGECHAR = $(CHANGECHAR_FOLDER)objects/
+OBJS_DIR_CHECKCHAR = $(CHECKCHAR_FOLDER)objects/
+OBJS_DIR_STRTOINT = $(STRTOINT_FOLDER)objects/
+OBJS_DIR_GET_NEXT_LINE = $(GET_NEXT_LINE_FOLDER)objects/
+OBJS_DIR_STRINGS = $(STRINGS_FOLDER)objects/
+OBJS_DIR_MEMORY = $(MEMORY_FOLDER)objects/
+OBJS_DIR_PUTS = $(PUTS_FOLDER)objects/
+OBJS_DIR_LISTS = $(LISTS_FOLDER)objects/
+OBJS_DIR_FTPRINTF = $(FTPRINTF_FOLDER)objects/
 
 # Object files with correct paths
 OBJS = $(addprefix $(OBJS_DIR_CHANGECHAR), $(notdir $(SRCS1:.c=.o))) \

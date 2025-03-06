@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 17:02:50 by aghergut          #+#    #+#             */
-/*   Updated: 2024/12/20 12:05:36 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:47:36 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../../include/minitalk.h"
 
 int	g_check;
 
