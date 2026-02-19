@@ -1,75 +1,98 @@
-# MINITALK
-## Inter-process communication using UNIX signals
+# Minitalk
 
-================================================================================
+A client-server communication project from 42 School that transmits messages between processes using only UNIX signals.
 
-## PROJECT STRUCTURE
+## Signals permitted
+
+The following UNIX signals are used for communication:
+
+- `SIGUSR1` -> **Binary 0** - Represents bit value 0 in message transmission;
+- `SIGUSR2` -> **Binary 1** - Represents bit value 1 in message transmission;
+
+## Table of Contents
+
+- [Algorithm](#algorithm)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Demo](#demo)
+
+## Algorithm
+
+The program uses bit-by-bit signal transmission to send messages:
+
+- **Signal encoding**: Each character (8 bits) is sent one bit at a time
+- **SIGUSR1**: Represents binary 0
+- **SIGUSR2**: Represents binary 1
+- **Character reconstruction**: Server receives 8 signals and rebuilds the character
+- **Message assembly**: Characters are concatenated until null terminator is received
+
+**Example transmission of 'A' (ASCII 65 = 0b01000001):**
+```
+Bit 7 → SIGUSR1 (0)
+Bit 6 → SIGUSR2 (1)
+Bit 5 → SIGUSR1 (0)
+Bit 4 → SIGUSR1 (0)
+Bit 3 → SIGUSR1 (0)
+Bit 2 → SIGUSR1 (0)
+Bit 1 → SIGUSR1 (0)
+Bit 0 → SIGUSR2 (1)
+```
+
+## Project Structure
 
 ```
-.
-├── Makefile
+minitalk42/
+├── assets/
+│   └── minitalk.gif            # Demo animation
 ├── include/
-│   └── minitalk.h
-├── libft/
-│   ├── libft.h
-│   ├── ft_printf/
-│   ├── strings/
-│   ├── memory/
-│   └── ...
-└── srcs/
-    ├── mandatory/
-    │   ├── client.c
-    │   └── server.c
-    └── bonus/
-        ├── client_bonus.c
-        └── server_bonus.c
+│   └── minitalk.h              # Project header
+├── libft/                      # Custom C library
+│   ├── ft_printf/              # Printf implementation
+│   ├── strings/                # String manipulation
+│   ├── memory/                 # Memory functions
+│   ├── strtoint/               # Conversion functions
+│   ├── puts/                   # Output functions
+│   ├── libft.h                 # Library header
+│   ├── libft.a                 # Compiled library (after make)
+│   └── Makefile
+├── srcs/
+│   ├── mandatory/
+│   │   ├── server.c            # Server program
+│   │   └── client.c            # Client program
+│   └── bonus/
+│       ├── server_bonus.c      # Server with acknowledgment
+│       └── client_bonus.c      # Client with acknowledgment
+├── Makefile                    # Build configuration
+└── README.md                   # This file
 ```
 
-================================================================================
+## Installation
 
-## MANDATORY PART
+### Prerequisites
+- GCC or Clang compiler
+- Make
+- Libc
 
-### Overview
-
-Create a client-server communication program using UNIX signals. The server must be started first and display its PID. The client will take the server PID and a string as parameters, then send the string to the server character by character using only `SIGUSR1` and `SIGUSR2` signals.
-
-### Key Requirements
-
-- Server prints its PID on startup
-- Client sends string to server via signals
-- Communication uses only `SIGUSR1` and `SIGUSR2`
-- Server displays received strings quickly (no delays > 1 second)
-- Server must be able to receive strings from several clients in succession
-- Communication protocol must include acknowledgment system
-
-### Signal Encoding
-
-Each character is transmitted bit-by-bit:
-- `SIGUSR1` represents bit value 0
-- `SIGUSR2` represents bit value 1
-
-**Example: Letter 'A' (ASCII 65 = 0b01000001)**
-
-```
-Bit 7 (MSB) → SIGUSR1 (0)
-Bit 6       → SIGUSR2 (1)
-Bit 5       → SIGUSR1 (0)
-Bit 4       → SIGUSR1 (0)
-Bit 3       → SIGUSR1 (0)
-Bit 2       → SIGUSR1 (0)
-Bit 1       → SIGUSR1 (0)
-Bit 0 (LSB) → SIGUSR2 (1)
-```
-
-### Compilation
+### Compile
 
 ```bash
+
+# Compile minitalk
 make
+
+# Compile bonus (with acknowledgment)
+make bonus
 ```
 
-This creates two executables: `server` and `client`
+This will create two executables:
+- `server` - The server program that receives messages
+- `client` - The client program that sends messages
 
-### Usage
+## Usage
+
+### Server
 
 **Terminal 1 - Start the server:**
 
@@ -77,215 +100,106 @@ This creates two executables: `server` and `client`
 ./server
 ```
 
-Output:
+**Output:**
 ```
 Server PID: 12345
 ```
 
-**Terminal 2 - Send messages:**
+### Client
+
+**Terminal 2 - Send a message:**
 
 ```bash
-./client [SERVER_PID] "Your message here"
+./client [SERVER_PID] "message"
+```
+
+**Examples:**
+
+```bash
+# Simple message
+./client 12345 "Hello, World!"
+```
+**Output:**
+Server terminal displays:
+```
+Hello, World!
+```
+
+#### Error handling
+The program outputs `Error` and exits for:
+- Invalid PID (non-numeric or negative)
+- Wrong number of arguments
+- Empty message string
+- Server not found (signal fails)
+
+```bash
+# These should all output "Error"
+./client abc "message"      # Invalid PID
+./client 12345              # Missing message
+./client                    # Missing arguments
+```
+
+### Bonus
+
+The **bonus** version adds bi-directional communication with acknowledgment:
+
+```bash
+./client [SERVER_PID] "message"
+```
+
+**Output:**
+Server acknowledges receipt, client displays confirmation:
+```
+Message received and acknowledged!
 ```
 
 **Example:**
 
 ```bash
-./client 12345 "Hello, World!"
+# Bonus with acknowledgment
+./client 12345 "Hello with confirmation!"
 ```
 
-**Server displays:**
+## Testing
 
-```
-Server PID: 12345
-Hello, World!
-```
-
-### Multiple Messages
-
-Send multiple strings by passing additional arguments:
+### Quick Tests
 
 ```bash
-./client 12345 "First message" "Second message" "Third message"
+# Start server and get PID
+./server &
+SERVER_PID=$!
+
+# Test simple message
+./client $SERVER_PID "Test message"
+
+# Test long message
+./client $SERVER_PID "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+# Test special characters
+./client $SERVER_PID "!@#$%^&*()_+-=[]{}|"
 ```
 
-**Server output:**
+## Demo
 
-```
-First message
-Second message
-Third message
-```
+Watch the minitalk program in action, demonstrating client-server signal communication:
 
-================================================================================
-
-## TECHNICAL IMPLEMENTATION
-
-### Signal Handling
-
-The project uses `sigaction()` for robust signal handling with the following flags:
-
-**SA_SIGINFO:**
-- Provides additional information about the signal
-- Allows access to sender's PID via `siginfo_t` structure
-
-**SA_RESTART:**
-- Automatically restarts system calls interrupted by signals
-- Prevents `pause()` from returning unexpectedly
-
-**SA_NODEFER:**
-- Allows signal handler to receive the same signal while executing
-- Necessary for continuous bit reception
-
-### Server Implementation
-
-**Key Functions:**
-
-```c
-void ft_handle(int signo, siginfo_t *info, void *context);
-void ft_handle_char(char **str, char ch);
-void ft_setup(void);
-```
-
-**Process:**
-
-1. Initialize signal handlers with `sigaction()`
-2. Display server PID
-3. Enter infinite loop with `pause()`
-4. Receive signals bit by bit
-5. Reconstruct characters from 8 bits
-6. Build string dynamically using `ft_expandstr()`
-7. Display message when null terminator received
-8. Send acknowledgment signal back to client
-
-### Client Implementation
-
-**Key Functions:**
-
-```c
-void send_char(pid_t pid, char c);
-void confirm(int signo);
-void handle_output(char **input, pid_t pid);
-```
-
-**Process:**
-
-1. Validate PID format (numeric only)
-2. Setup signal handler for acknowledgment
-3. For each character in string:
-   - Extract each bit from MSB to LSB
-   - Send `SIGUSR1` (0) or `SIGUSR2` (1)
-   - Wait for server acknowledgment
-   - Add timing delay to prevent signal overflow
-4. Send null terminator to mark end of message
-
-### Synchronization
-
-**Bit-Level Acknowledgment:**
-- Server sends `SIGUSR2` after receiving each bit
-- Client waits for acknowledgment before sending next bit
-- Global flag `g_check` controls synchronization
-
-**Timing:**
-- `usleep(100)` after sending signal
-- `usleep(10)` while waiting for acknowledgment
-- Prevents signals from arriving faster than server can process
-
-### Memory Management
-
-- String built dynamically with `ft_expandstr(char *str, char c)`
-- Memory freed when null terminator received
-- Static variables maintain state between signal handler calls
-
-### Error Handling
-
-**Client-side:**
-- Parameter count validation (`argc != 3`)
-- Empty string check
-- PID format validation (must be all digits)
-- Signal sending error detection
-
-**Server-side:**
-- Signal handler registration error checks
-- Memory allocation failure handling
-
-================================================================================
-
-## BONUS PART
-
-### Additional Features
-
-The bonus version adds bi-directional communication:
-
-1. **Server-to-Client Acknowledgment:**
-   - Server sends `SIGUSR1` when complete message received
-   - Client displays confirmation with message count
-
-2. **Unicode Support:**
-   - Handles UTF-8 encoded characters
-   - Works with extended character sets
-
-### Implementation Differences
-
-**server_bonus.c:**
-- Sends `SIGUSR1` to client PID when null terminator processed
-- Extracts client PID from `siginfo_t->si_pid`
-
-**client_bonus.c:**
-- Handles both `SIGUSR1` and `SIGUSR2`
-- Maintains static counter for received messages
-- Displays "Received N string(s)!" with proper pluralization
-
-### Compilation
-
-```bash
-make bonus
-```
-
-This creates: `server` and `client` (bonus versions)
-
-### Usage
-
-Same as mandatory, with additional client output:
-
-```bash
-./client 12345 "Hello" "World"
-```
-
-**Client output:**
-
-```
-Received 1 string!
-
-Received 2 strings!
-```
-
-================================================================================
-
-## BUILD SYSTEM
-
-### Makefile Targets
-
-```bash
-make        # Compile mandatory version
-make bonus  # Compile bonus version
-make clean  # Remove object files
-make fclean # Remove object files and executables
-make re     # Recompile everything
-```
-
-### Compilation Flags
-
-The project is compiled with strict flags:
-- `-Wall` - Enable all warnings
-- `-Wextra` - Enable extra warnings
-- `-Werror` - Treat warnings as errors
-
-### Dependencies
-
-- Custom `libft` library (included)
-- External functions allowed:
-  - `write`, `ft_printf`, `signal`, `sigemptyset`, `sigaddset`, `sigaction`
-  - `kill`, `getpid`, `malloc`, `free`, `pause`, `sleep`, `usleep`, `exit`
-
-================================================================================
+<table>
+	<tr>
+		<td width="40%">
+			<img
+			src="assets/minitalk.gif"
+			alt="Minitalk Demo"
+			width="350"
+			height="350"
+			>
+		<td width="60%">
+			<b>What you're seeing in the demo:</b>
+			<ul>
+				<li>Server starts and displays its PID</li>
+				<li>Client sends messages character by character using signals</li>
+				<li>Server receives and reconstructs the message bit by bit</li>
+				<li>Message appears on server terminal in real-time!</li>
+			</ul>
+		</td>
+	</tr>
+</table>

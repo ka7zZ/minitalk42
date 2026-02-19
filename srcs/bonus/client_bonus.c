@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:21:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/03/06 19:47:29 by aghergut         ###   ########.fr       */
+/*   Updated: 2026/02/18 11:50:41 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	main(int argc, char **argv)
 		ptr++;
 	if (*ptr != '\0')
 		return (ft_printf("Wrong pid format!\n"));
-	signal(SIGUSR1, &handle_input);
-	signal(SIGUSR2, &handle_input);
+	signal(SIGUSR1, handle_input);
+	signal(SIGUSR2, handle_input);
 	handle_output(argv, (pid_t)ft_atoi(argv[1]));
 	return (0);
 }
